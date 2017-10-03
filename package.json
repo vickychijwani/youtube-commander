@@ -36,8 +36,9 @@
     "@types/react": "^16.0.7",
     "@types/react-dom": "^15.5.5",
     "concurrently": "^3.5.0",
-    "electron": "^1.7.8",
+    "electron": "~1.7.8",
     "electron-builder": "^19.33.0",
+    "electron-devtools-installer": "^2.2.0",
     "wait-on": "^2.0.2"
   }
 }

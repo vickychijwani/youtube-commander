@@ -1,5 +1,8 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
+# sensitive stuff
+/src/secrets.ts
+
 # dependencies
 /node_modules
 
