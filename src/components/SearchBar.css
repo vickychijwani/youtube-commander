@@ -1,0 +1,22 @@
+.SearchBar {
+}
+
+.SearchBar pre {
+    margin: 0;
+}
+
+.SearchBar .input {
+    height: var(--search-bar-height);
+    padding: var(--padding-normal);
+
+    /* add a constant number because centering via line height isn't perfect
+       because of the font's built-in padding or something */
+    line-height: calc(var(--search-bar-height) - 2 * var(--padding-normal) + 4px);
+    font-size: 48px;
+    font-family: inherit;
+
+    background-color: var(--bg-dark);
+    color: var(--fg);
+    border-radius: 4px;
+    box-shadow: inset 2px 2px 5px var(--shadow-dark);
+}

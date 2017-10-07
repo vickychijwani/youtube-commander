@@ -1,0 +1,58 @@
+.VideoGrid {
+    --num-columns: 3;
+    --aspect-ratio: calc(16 / 9);
+    --corner-radius: 4px;
+    --zoom-selected-item: 1.07;
+    --zoom-timing: 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+    --padding-item: var(--padding-normal);
+    --padding-total: calc(var(--padding-normal) * (var(--num-columns) + 1));
+    --item-width: calc((var(--launcher-width) - var(--padding-total)) / var(--num-columns));
+    --item-height: calc(var(--item-width) / var(--aspect-ratio));
+
+    display: grid;
+    grid-template-columns: repeat(var(--num-columns), var(--item-width));
+    grid-auto-rows: var(--item-height);
+    grid-gap: var(--padding-item);
+}
+
+.VideoGrid .item {
+    cursor: pointer;
+    position: relative;
+}
+
+.VideoGrid .item.active {
+    outline: none;
+}
+
+.VideoGrid .item .thumb {
+    width: 100%;
+    height: 100%;
+    box-shadow: 0 1px 2px var(--shadow);
+    border-radius: var(--corner-radius);
+    transition: all var(--zoom-timing);
+}
+
+.VideoGrid .item.active .thumb {
+    box-shadow: none;
+    transform: scale(var(--zoom-selected-item));
+}
+
+/* http://tobiasahlin.com/blog/how-to-animate-box-shadow/ */
+.VideoGrid .item::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    z-index: -1;
+    width: var(--item-width);
+    height: var(--item-height);
+    border-radius: var(--corner-radius);
+    box-shadow: 0 5px 15px var(--shadow-dark);
+    opacity: 0;
+    transition: opacity var(--zoom-timing), transform var(--zoom-timing);
+}
+
+.VideoGrid .item.active::after {
+    opacity: 1;
+    transform: scale(var(--zoom-selected-item));
+}

@@ -1,51 +1,21 @@
 import * as React from 'react';
-import { KeyboardEvent } from 'react';
+import './SearchBar.css';
 
 export interface Props {
-    isFocused: boolean;
-    onChange: (query: string) => void;
-    onFocus: () => void;
+    text: string;
+    // tslint:disable-next-line
+    children?: any;
 }
 
-class SearchBar extends React.Component<Props, object> {
-    $input: HTMLInputElement|null;
-
-    constructor(props: Props) {
-        super(props);
-        this.$input = null;
-    }
-
-    render() {
-        const {isFocused, onChange, onFocus} = this.props;
-        const onKeyPress = function (event: KeyboardEvent<HTMLInputElement>) {
-            if (event.key === 'Enter') {
-                onChange((event.target as HTMLInputElement).value);
-            }
-        };
-
-        return (
-            <input
-                type='text'
-                autoFocus={isFocused}
-                placeholder='Search'
-                onKeyPress={onKeyPress}
-                onFocus={onFocus}
-                ref={(input) => this.$input = input}
-            />
-        );
-    }
-
-    componentDidUpdate() {
-        if (this.$input !== null) {
-            if (this.props.isFocused) {
-                this.$input.focus();
-            }
-        }
-    }
-
-    componentWillUnmount() {
-        this.$input = null;
-    }
+function SearchBar({text, children}: Props) {
+    return (
+        <div className='SearchBar'>
+            <pre className='input'>
+                {text}
+            </pre>
+            {...children}
+        </div>
+    );
 }
 
 export default SearchBar;

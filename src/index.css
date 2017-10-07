@@ -1,5 +1,45 @@
-body {
-    margin: 0;
-    padding: 0;
-    font-family: sans-serif;
+:root {
+    --window-width: 751px;
+    --window-height: 450px;
+    --padding-normal: 16px;
+
+    /* dark theme */
+    --bg: #282828;
+    --bg-dark: #181818;
+    --fg: #E5E5E5;
+    --fg-dark: #888;
+    --shadow: #222;
+    --shadow-dark: #111;
+
+    /* light theme */
+    /*--bg: #f4f4f6;*/
+    /*--bg-dark: #e7e7e7;*/
+    /*--fg: #101010;*/
+    /*--shadow: rgba(0, 0, 0, 0.15);*/
+    /*--shadow-dark: rgba(0, 0, 0, 0.4);*/
+}
+
+@font-face {
+    font-family: 'Mukta';
+    src: url('./fonts/Mukta-Regular.ttf');
+}
+
+html, body, #root {
+    margin: 0; padding: 0;
+}
+
+html {
+    width: var(--window-width);
+    height: var(--window-height);
+    background-color: var(--bg);
+    color: var(--fg);
+    font-family: Mukta, sans-serif;
+}
+
+/* apply a natural box layout model to all elements, but allowing components to change */
+html {
+    box-sizing: border-box;
+}
+*, *:before, *:after {
+    box-sizing: inherit;
 }

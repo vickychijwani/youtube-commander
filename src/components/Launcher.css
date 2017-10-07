@@ -1,2 +1,51 @@
-.App {
+::-webkit-scrollbar {
+    width: 0;
+}
+
+.Launcher {
+    --launcher-width: var(--window-width);
+    --launcher-height: var(--window-height);
+    --search-bar-height: 72px;
+    --search-bar-bottom-padding: calc(0.15 * var(--padding-normal));
+
+    /* z indices */
+    --search-bar-z: 100;
+
+    width: var(--launcher-width);
+    height: var(--launcher-height);
+}
+
+.Launcher:focus {
+    outline: none;
+}
+
+.Launcher .SearchBar {
+    position: fixed;
+    width: 100%;
+    padding: var(--padding-normal);
+    padding-bottom: var(--search-bar-bottom-padding);
+    background: var(--bg);
+    z-index: var(--search-bar-z);
+}
+
+.Launcher .tip {
+    color: var(--fg-dark);
+    font-size: 14px;
+}
+
+.Launcher .tip kbd {
+    font-family: inherit;
+    padding-right: 2px;
+    filter: brightness(130%);
+}
+
+.Launcher .tip .separator {
+    padding: 0 2px;
+    font-size: 12px;
+    filter: brightness(80%);
+}
+
+.Launcher .VideoGrid {
+    padding: var(--padding-normal);
+    padding-top: calc(var(--search-bar-height) + 3 * var(--padding-normal) + var(--search-bar-bottom-padding));
 }

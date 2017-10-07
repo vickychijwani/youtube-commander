@@ -1,10 +1,13 @@
 import * as React from 'react';
-import './Launcher.css';
+import { KeyboardEvent } from 'react';
+import scrollToElement from 'scroll-to-element';
 
 import SearchBar from './SearchBar';
-import VideoList, { SearchResult } from './VideoList';
+import VideoGrid, { SearchResult } from './VideoGrid';
+import utils from '../utils';
 import * as yt from '../typings/youtube';
-import { KeyboardEvent } from 'react';
+
+import './Launcher.css';
 
 // tslint:disable-next-line
 declare const gapi: any;
@@ -14,48 +17,85 @@ export interface Props {
 }
 
 interface State {
-    // -1 if the search bar is focused, else the index of the focused search result
-    focusedItem: number;
+    activeIndex: number;
+    searchText: string;
     searchResults: SearchResult[];
 }
 
 class Launcher extends React.Component<Props, State> {
+    private static SEARCH_DELAY = 500;
+    private scheduleSearch: (searchText: string) => void;
+
     constructor(props: Props) {
         super(props);
         this.state = {
-            focusedItem: -1,
-            searchResults: []
+            activeIndex: 0,
+            searchText: '',
+            searchResults: [],
         };
+        this.scheduleSearch = utils.debounce(this.search, Launcher.SEARCH_DELAY).bind(this);
     }
 
     render() {
-        const {onSelect} = this.props;
+        const {searchText, searchResults, activeIndex} = this.state;
         return (
-            <div className='App' tabIndex={0} onKeyDown={this.onKeyDown}>
-                <SearchBar
-                    isFocused={this.state.focusedItem === -1}
-                    onChange={this.search}
-                    onFocus={() => this.setState({focusedItem: -1})}
-                />
-                <VideoList
-                    items={this.state.searchResults}
-                    focusedItem={this.state.focusedItem}
-                    onFocus={(index) => this.setState({focusedItem: index})}
-                    onSelect={onSelect}
+            <div
+                className='Launcher'
+                tabIndex={0}
+                onKeyDown={this.onKeyDown}
+                ref={$el => $el && $el.focus()}
+            >
+                <SearchBar text={searchText}>
+                    <div className='tip'>
+                        <kbd>arrow keys</kbd>: navigate<span className='separator'> • </span>
+                        <kbd>enter</kbd>: add to queue<span className='separator'> • </span>
+                        <kbd>ctrl+enter</kbd>: play now<span className='separator'> • </span>
+                        <kbd>tab</kbd>: options
+                    </div>
+                </SearchBar>
+                <VideoGrid
+                    items={searchResults}
+                    activeIndex={activeIndex}
+                    onActivate={(index) => this.setState({activeIndex: index})}
                 />
             </div>
         );
     }
 
     onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === 'ArrowDown') {
+        /* Events for search bar */
+        // this is a giant hack to detect printable characters so they can be forwarded to SearchBar
+        if (event.key.length === 1) {
+            this.setSearchText(this.state.searchText + event.key);
+        } else if (event.key === 'Backspace') {
+            this.setSearchText(this.state.searchText.slice(0, -1));
+        }
+
+        /* Events for search results */
+        // tslint:disable-next-line
+        else if (event.key === 'ArrowDown') {
             this.focusNextItem();
         } else if (event.key === 'ArrowUp') {
             this.focusPreviousItem();
+        } else if (event.key === 'Enter') {
+            this.props.onSelect(this.state.searchResults[this.state.activeIndex].id);
+        } else {
+            return;
         }
+        event.preventDefault();
     }
 
-    search = (query: string) => {
+    setSearchText(searchText: string) {
+        this.setState({searchText},
+            () => this.scheduleSearch(this.state.searchText));
+    }
+
+    search = (searchText: string) => {
+        searchText = searchText.trim();
+        if (!searchText) {
+            this.setState({ searchResults: [] });
+            return;
+        }
         const ytItemToVideo = (item: yt.SearchResult) => ({
             id: item.id.videoId,
             type: item.id.kind.replace('youtube#', ''),
@@ -68,24 +108,38 @@ class Launcher extends React.Component<Props, State> {
         });
         gapi.client.youtube.search.list({
             part: 'snippet',
-            q: query,
-            maxResults: 10
+            q: searchText,
+            maxResults: 12
         }).then((r: { result: { items: yt.SearchResult[] } }) => {
             const searchResults = r.result.items.map(ytItemToVideo);
-            this.setState({searchResults});
+            this.setState({
+                searchResults,
+                activeIndex: (searchResults.length > 0) ? 0 : -1
+            });
         });
     }
 
     focusNextItem() {
-        const nextIndex = this.state.focusedItem + 1;
+        const nextIndex = this.state.activeIndex + 1;
         const maxIndex = this.state.searchResults.length - 1;
-        this.setState({focusedItem: Math.min(nextIndex, maxIndex)});
+        const activeIndex = Math.min(nextIndex, maxIndex);
+        Launcher.scrollToItem(activeIndex);
+        this.setState({activeIndex});
     }
 
     focusPreviousItem() {
-        const prevIndex = this.state.focusedItem - 1;
-        const minIndex = -1;    // not 0 because the search bar itself is considered to be at index -1
-        this.setState({focusedItem: Math.max(prevIndex, minIndex)});
+        const prevIndex = this.state.activeIndex - 1;
+        const activeIndex = Math.max(prevIndex, 0);
+        Launcher.scrollToItem(activeIndex);
+        this.setState({activeIndex});
+    }
+
+    static scrollToItem(index: number) {
+        scrollToElement(`#item${index}`, {
+            align: 'bottom',
+            offset: 16,
+            duration: 200,
+        });
     }
 }
 

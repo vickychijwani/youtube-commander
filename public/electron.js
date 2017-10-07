@@ -13,7 +13,7 @@ let launcher = null,
 
 function createWindow() {
     launcher = new BrowserWindow({
-        width: 750,
+        width: 751,
         height: 450,
         frame: false,
         alwaysOnTop: true,
