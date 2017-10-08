@@ -3,8 +3,9 @@ import { KeyboardEvent } from 'react';
 import scrollToElement from 'scroll-to-element';
 
 import SearchBar from './SearchBar';
-import VideoGrid, { SearchResult } from './VideoGrid';
+import VideoGrid from './VideoGrid';
 import utils from '../utils';
+import { Video } from '../typings/model';
 import * as yt from '../typings/youtube';
 
 import './Launcher.css';
@@ -13,13 +14,13 @@ import './Launcher.css';
 declare const gapi: any;
 
 export interface Props {
-    onSelect: (videoId: string) => void;
+    onSelect: (video: Video) => void;
 }
 
 interface State {
     activeIndex: number;
     searchText: string;
-    searchResults: SearchResult[];
+    searchResults: Video[];
 }
 
 class Launcher extends React.Component<Props, State> {
@@ -80,7 +81,7 @@ class Launcher extends React.Component<Props, State> {
         } else if (event.key === 'ArrowUp') {
             this.focusPreviousItem();
         } else if (event.key === 'Enter') {
-            this.props.onSelect(this.state.searchResults[this.state.activeIndex].id);
+            this.props.onSelect(this.state.searchResults[this.state.activeIndex]);
         } else {
             return;
         }

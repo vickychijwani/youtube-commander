@@ -2,8 +2,9 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import './index.css';
 import utils from './utils';
+import { Video } from './typings/model';
 import Launcher from './components/Launcher';
-import Player from './components/Player';
+import PlayerWindow, { Props as PlayerProps } from './components/PlayerWindow';
 
 // create-react-app currently doesn't support multiple HTML files
 // which is why we use a URL param as a workaround
@@ -33,12 +34,22 @@ const rootWidget = urlParams.get('root');
 switch (rootWidget) {
     case 'launcher':
         utils.loadGoogleAPIs(() => ReactDOM.render(
-            <Launcher onSelect={(videoId) => ipcRenderer.send('play-video', videoId)}/>,
+            <Launcher onSelect={(video) => ipcRenderer.send('add-to-queue', video)}/>,
             $root));
         break;
     case 'player':
-        ipcRenderer.on('play-video', (_: object, videoId: string) => {
-            ReactDOM.render(<Player videoId={videoId}/>, $root);
+        // TODO move this into application-wide state using Flux+Immutable or something similar
+        // TODO also see this: https://github.com/samiskin/redux-electron-store
+        const playerState: PlayerProps = {
+            queue: [],
+            playing: true,
+            currentIndex: 0,
+            currentTimestamp: 0,
+            volume: 100,
+        };
+        ipcRenderer.on('add-to-queue', (_: object, video: Video) => {
+            playerState.queue.push(video);
+            ReactDOM.render(<PlayerWindow {...playerState}/>, $root);
         });
         break;
     default:

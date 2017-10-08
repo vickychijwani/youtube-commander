@@ -47,16 +47,13 @@ function createWindow() {
     }
 
     const { screen } = require('electron');
-    const doPlayVideo = (videoId) => {
-        player.webContents.send('play-video', videoId);
-    }
-    ipcMain.on('play-video', (_, videoId) => {
+    ipcMain.on('add-to-queue', (_, video) => {
         if (player === null) {
             const { x, y, width, height } = screen.getPrimaryDisplay().workArea;
             player = new BrowserWindow({
                 width: 640,
                 height: 360,
-                // frame: false,
+                frame: false,
                 alwaysOnTop: true,
                 minimizable: false,
                 maximizable: false,
@@ -68,7 +65,7 @@ function createWindow() {
             });
             player.loadURL(config.playerUrl);
             player.on('ready-to-show', () => {
-                doPlayVideo(videoId);
+                player.webContents.send('add-to-queue', video);
                 player.show();
             });
             player.on('closed', () => player = null);
@@ -80,7 +77,7 @@ function createWindow() {
             }));
             player.setMenu(menu);
         } else {
-            doPlayVideo(videoId);
+            player.webContents.send('add-to-queue', video);
             player.focus(); // alwaysOnTop doesn't seem to work... (on Linux/MATE)
         }
     });

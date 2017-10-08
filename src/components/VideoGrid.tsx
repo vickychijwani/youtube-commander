@@ -1,26 +1,9 @@
 import * as React from 'react';
-import * as yt from '../typings/youtube';
 import './VideoGrid.css';
-
-export interface SearchResult {
-    id: string;
-    type: string;
-    thumbnails: {
-        'default': yt.Thumbnail,   // video: 120x90, channel: 88x88
-        medium: yt.Thumbnail,      // video: 320x180, channel: 240x240
-        high: yt.Thumbnail,        // video: 480x360, channel: 800x800
-        standard?: yt.Thumbnail,   // video: 640x480
-        maxres?: yt.Thumbnail,     // video: 1280x720
-    };
-    title: string;
-    description: string;
-    publishedAt: string;
-    channelId: string;
-    channelTitle: string;
-}
+import { Video } from '../typings/model';
 
 export interface Props {
-    items: SearchResult[];
+    items: Video[];
     activeIndex: number;
     onActivate: (index: number) => void;
 }
@@ -37,7 +20,7 @@ function VideoGrid(props: Props) {
                     onClick={event => onActivate(index)}
                 >
                     <div className='thumb-container'>
-                        <img className='thumb' src={item.thumbnails.medium.url} />
+                        <img className='thumb' src={item.thumbnails.medium.url}/>
                     </div>
                 </div>
             ))}

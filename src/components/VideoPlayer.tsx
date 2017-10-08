@@ -4,7 +4,7 @@ export interface Props {
     id: string;
 }
 
-function Video({id}: Props) {
+function VideoPlayer({id}: Props) {
     return (
         <div>
             <iframe
@@ -17,4 +17,4 @@ function Video({id}: Props) {
     );
 }
 
-export default Video;
+export default VideoPlayer;

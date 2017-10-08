@@ -1,8 +1,4 @@
-export interface Thumbnail {
-    url: string;
-    width: number;
-    height: number;
-}
+import { Thumbnail } from './model';
 
 export interface SearchResult {
     kind: 'youtube#searchResult';
