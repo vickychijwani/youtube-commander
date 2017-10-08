@@ -1,0 +1,109 @@
+/* FIXME refactor this CSS file, extract variables and so on, and move the progress bar stuff to a new file */
+.VideoOverlay {
+    position: relative;
+    height: 100%;
+}
+
+.VideoOverlay .ProgressBar {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.ProgressBar,
+.VolumeSlider {
+    position: relative;
+    background: #eee;
+    border-radius: 4px;
+}
+
+.ProgressBar-elapsed, .ProgressBar-value,
+.VolumeSlider-elapsed,
+.VolumeSlider-value {
+    background: #ccc;
+    border-radius: 4px;
+}
+
+.ProgressBar-seek,
+.VolumeSlider-seek {
+    position: absolute;
+    cursor: pointer;
+}
+
+.ProgressBar-handle,
+.VolumeSlider-handle {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background: #72D687;
+    border-radius: 100%;
+    transform: scale(0);
+    transition: transform 0.2s;
+}
+
+.ProgressBar.isSeekable:hover .ProgressBar-handle,
+.ProgressBar.isSeekable:hover .VolumeSlider-handle, .ProgressBar.isEnabled:hover .ProgressBar-handle,
+.ProgressBar.isEnabled:hover .VolumeSlider-handle,
+.VolumeSlider.isSeekable:hover .ProgressBar-handle,
+.VolumeSlider.isSeekable:hover .VolumeSlider-handle,
+.VolumeSlider.isEnabled:hover .ProgressBar-handle,
+.VolumeSlider.isEnabled:hover .VolumeSlider-handle {
+    transform: scale(1);
+}
+
+.ProgressBar.isSeekable:hover .ProgressBar-intent,
+.ProgressBar.isSeekable:hover .VolumeSlider-intent, .ProgressBar.isEnabled:hover .ProgressBar-intent,
+.ProgressBar.isEnabled:hover .VolumeSlider-intent,
+.VolumeSlider.isSeekable:hover .ProgressBar-intent,
+.VolumeSlider.isSeekable:hover .VolumeSlider-intent,
+.VolumeSlider.isEnabled:hover .ProgressBar-intent,
+.VolumeSlider.isEnabled:hover .VolumeSlider-intent {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.ProgressBar.isSeekable .ProgressBar-elapsed,
+.ProgressBar.isSeekable .VolumeSlider-value, .ProgressBar.isEnabled .ProgressBar-elapsed,
+.ProgressBar.isEnabled .VolumeSlider-value,
+.VolumeSlider.isSeekable .ProgressBar-elapsed,
+.VolumeSlider.isSeekable .VolumeSlider-value,
+.VolumeSlider.isEnabled .ProgressBar-elapsed,
+.VolumeSlider.isEnabled .VolumeSlider-value {
+    background: #72D687;
+}
+
+.ProgressBar {
+    height: 8px;
+}
+
+.ProgressBar-elapsed {
+    height: 100%;
+}
+
+.ProgressBar-seek {
+    top: -6px;
+    right: 0;
+    bottom: -6px;
+    left: 0;
+}
+
+.ProgressBar-handle {
+    top: 0;
+    margin: -4px 0 0 -8px;
+}
+
+.ProgressBar.isSeekable:hover .ProgressBar-handle {
+    transform: scale(1);
+}
+
+.ProgressBar.isSeekable:hover .ProgressBar-intent {
+    top: 0;
+    left: 0;
+    height: 100%;
+}
+
+.ProgressBar.isLoading {
+    opacity: 0.5;
+    background: #ccc;
+    animation: barLoading 2s infinite;
+}

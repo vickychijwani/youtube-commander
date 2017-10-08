@@ -1,10 +1,11 @@
+// @flow
 import secrets from './secrets';
 
-// tslint:disable-next-line
-declare const gapi: any;
+// noinspection ES6ConvertVarToLetConst
+declare var gapi: any;
 
 const utils = {
-    loadGoogleAPIs: (callback: VoidFunction) => {
+    loadGoogleAPIs: (callback: Function) => {
         gapi.load('client', () => {
             gapi.client.init({
                 'apiKey': secrets.YOUTUBE_API_KEY,
@@ -17,15 +18,13 @@ const utils = {
         });
     },
 
-    // tslint:disable-next-line
-    debounce: (fn: (...args: any[]) => any, delay: number) => {
-        let timer: number;
-        // tslint:disable-next-line
-        return function (...args: any[]) {
+    debounce: (fn: Function, delay: number) => {
+        let timer;
+        return function (...args: any) {
             clearTimeout(timer);
             timer = window.setTimeout(() => fn(...args), delay);
         };
-    }
+    },
 };
 
 export default utils;

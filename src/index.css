@@ -1,6 +1,9 @@
 :root {
     --window-width: 751px;
     --window-height: 450px;
+    --video-aspect-ratio: calc(16 / 9);
+    --player-height: 360px;
+    --player-width: calc(var(--video-aspect-ratio) * var(--player-height));
     --padding-normal: 16px;
 
     /* dark theme */
@@ -29,8 +32,9 @@ html, body, #root {
 }
 
 html {
-    width: var(--window-width);
-    height: var(--window-height);
+    /* NOTE: don't set width/height here as it applies to the launcher AND player! */
+    /*width: var(--window-width);*/
+    /*height: var(--window-height);*/
     background-color: var(--bg);
     color: var(--fg);
     font-family: Mukta, sans-serif;

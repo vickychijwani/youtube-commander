@@ -1,10 +1,10 @@
+// @flow
 import * as React from 'react';
 import './SearchBar.css';
 
-export interface Props {
-    text: string;
-    // tslint:disable-next-line
-    children?: any;
+export type Props = {
+    text: string,
+    children?: React.Node,
 }
 
 function SearchBar({text, children}: Props) {
@@ -13,7 +13,7 @@ function SearchBar({text, children}: Props) {
             <pre className='input'>
                 {text}
             </pre>
-            {...children}
+            {children}
         </div>
     );
 }

@@ -1,6 +1,5 @@
 .VideoGrid {
     --num-columns: 3;
-    --aspect-ratio: calc(16 / 9);
     --corner-radius: 4px;
     --zoom-selected-item: 1.07;
     --zoom-timing: 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -8,7 +7,7 @@
     --padding-item: var(--padding-normal);
     --padding-total: calc(var(--padding-item) * (var(--num-columns) + 1));
     --item-width: calc((var(--launcher-width) - var(--padding-total)) / var(--num-columns));
-    --item-height: calc(var(--item-width) / var(--aspect-ratio));
+    --item-height: calc(var(--item-width) / var(--video-aspect-ratio));
 
     display: grid;
     grid-template-columns: repeat(var(--num-columns), var(--item-width));

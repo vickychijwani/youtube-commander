@@ -20,28 +20,30 @@
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-player": "^0.25.0",
-    "react-scripts-ts": "2.7.0",
+    "react-player-controls": "^0.5.17",
     "scroll-to-element": "^2.0.0"
   },
   "scripts": {
-    "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build",
-    "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject",
-    "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "lint": "eslint src/**/*.js && flow",
+    "start": "yarn lint && react-scripts start",
+    "build": "yarn lint && react-scripts build",
+    "test": "yarn lint && react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "electron": "electron .",
     "electron-pack-dir": "yarn build && electron-builder --em.main=build/electron.js --dir",
     "electron-package": "yarn build && electron-builder --em.main=build/electron.js"
   },
   "devDependencies": {
-    "@types/jest": "^21.1.1",
-    "@types/node": "^8.0.31",
-    "@types/react": "^16.0.7",
-    "@types/react-dom": "^15.5.5",
+    "babel-eslint": "^8.0.1",
     "concurrently": "^3.5.0",
     "devtron": "^1.4.0",
     "electron": "~1.7.8",
     "electron-builder": "^19.33.0",
     "electron-devtools-installer": "^2.2.0",
+    "eslint": "^4.8.0",
+    "eslint-plugin-flowtype": "^2.39.1",
+    "flow-bin": "^0.56.0",
+    "react-scripts": "1.0.14",
     "wait-on": "^2.0.2"
   }
 }

@@ -1,33 +1,30 @@
+// @flow
 import * as React from 'react';
-import { KeyboardEvent } from 'react';
 import scrollToElement from 'scroll-to-element';
 
 import SearchBar from './SearchBar';
 import VideoGrid from './VideoGrid';
 import utils from '../utils';
-import { Video } from '../typings/model';
-import * as yt from '../typings/youtube';
+import type {SearchResult} from '../typings/model';
 
 import './Launcher.css';
 
-// tslint:disable-next-line
-declare const gapi: any;
-
-export interface Props {
-    onSelect: (video: Video) => void;
+export type Props = {
+    onSelect: (video: SearchResult) => void,
 }
 
-interface State {
-    activeIndex: number;
-    searchText: string;
-    searchResults: Video[];
+type State = {
+    activeIndex: number,
+    searchText: string,
+    searchResults: SearchResult[],
 }
 
 class Launcher extends React.Component<Props, State> {
-    private static SEARCH_DELAY = 500;
-    private static ITEM_SCROLL_OFFSET = parseInt(getComputedStyle(document.body)
+    static SEARCH_DELAY = 500;
+    // $FlowFixMe
+    static ITEM_SCROLL_OFFSET = parseInt(getComputedStyle(document.body)
         .getPropertyValue('--padding-normal').trim(), 10);
-    private scheduleSearch: (searchText: string) => void;
+    scheduleSearch: (searchText: string) => void;
 
     constructor(props: Props) {
         super(props);
@@ -65,7 +62,7 @@ class Launcher extends React.Component<Props, State> {
         );
     }
 
-    onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    onKeyDown = (event: SyntheticKeyboardEvent<HTMLElement>) => {
         /* Events for search bar */
         // this is a giant hack to detect printable characters so they can be forwarded to SearchBar
         if (event.key.length === 1) {
@@ -75,7 +72,6 @@ class Launcher extends React.Component<Props, State> {
         }
 
         /* Events for search results */
-        // tslint:disable-next-line
         else if (event.key === 'ArrowDown') {
             this.focusNextItem();
         } else if (event.key === 'ArrowUp') {
@@ -96,32 +92,22 @@ class Launcher extends React.Component<Props, State> {
     search = (searchText: string) => {
         searchText = searchText.trim();
         if (!searchText) {
-            this.setState({ searchResults: [] });
+            this.setState({searchResults: []});
             return;
         }
-        const ytItemToVideo = (item: yt.SearchResult) => ({
-            id: item.id.videoId,
-            type: item.id.kind.replace('youtube#', ''),
-            thumbnails: item.snippet.thumbnails,
-            title: item.snippet.title,
-            description: item.snippet.description,
-            publishedAt: item.snippet.publishedAt,
-            channelId: item.snippet.channelId,
-            channelTitle: item.snippet.channelTitle,
-        });
-        gapi.client.youtube.search.list({
+        // $FlowFixMe
+        gapi.client.youtube.search.list({   // eslint-disable-line
             part: 'snippet',
             q: searchText,
             maxResults: 12
-        }).then((r: { result: { items: yt.SearchResult[] } }) => {
+        }).then(({result: {items}}) => {
             if (searchText !== this.state.searchText) {
                 // search text has changed, throw away the results...
                 return;
             }
-            const searchResults = r.result.items.map(ytItemToVideo);
             this.setState({
-                searchResults,
-                activeIndex: (searchResults.length > 0) ? 0 : -1
+                searchResults: items,
+                activeIndex: (items.length > 0) ? 0 : -1
             });
         });
     }
