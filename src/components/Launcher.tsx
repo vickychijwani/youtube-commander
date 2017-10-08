@@ -111,6 +111,10 @@ class Launcher extends React.Component<Props, State> {
             q: searchText,
             maxResults: 12
         }).then((r: { result: { items: yt.SearchResult[] } }) => {
+            if (searchText !== this.state.searchText) {
+                // search text has changed, throw away the results...
+                return;
+            }
             const searchResults = r.result.items.map(ytItemToVideo);
             this.setState({
                 searchResults,

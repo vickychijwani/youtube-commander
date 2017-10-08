@@ -6,7 +6,7 @@
     --zoom-timing: 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
 
     --padding-item: var(--padding-normal);
-    --padding-total: calc(var(--padding-normal) * (var(--num-columns) + 1));
+    --padding-total: calc(var(--padding-item) * (var(--num-columns) + 1));
     --item-width: calc((var(--launcher-width) - var(--padding-total)) / var(--num-columns));
     --item-height: calc(var(--item-width) / var(--aspect-ratio));
 
