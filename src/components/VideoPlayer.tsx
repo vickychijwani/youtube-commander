@@ -1,4 +1,5 @@
 import * as React from 'react';
+import ReactPlayer from 'react-player';
 
 export interface Props {
     id: string;
@@ -7,11 +8,9 @@ export interface Props {
 function VideoPlayer({id}: Props) {
     return (
         <div>
-            <iframe
-                src={`https://www.youtube.com/embed/${id}?autoplay=1`}
-                className='video'
-                frameBorder='0'
-                allowFullScreen={true}
+            <ReactPlayer
+                url={`https://www.youtube.com/watch?v=${id}`}
+                playing={true}
             />
         </div>
     );

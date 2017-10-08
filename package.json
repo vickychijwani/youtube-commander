@@ -19,6 +19,7 @@
     "electron-is-dev": "^0.3.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "react-player": "^0.25.0",
     "react-scripts-ts": "2.7.0",
     "scroll-to-element": "^2.0.0"
   },
