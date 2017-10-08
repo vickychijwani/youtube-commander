@@ -6,6 +6,16 @@ const {
 const path = require('path');
 const isDev = require('electron-is-dev');
 
+const config = { isDev };
+if (config.isDev) {
+    config.launcherUrl = 'http://localhost:3000/index.html?root=launcher';
+    config.playerUrl = `http://localhost:3000/index.html?root=player`;
+} else {
+    config.launcherUrl = `file://${path.join(__dirname, '../build/index.html?root=launcher')}`;
+    config.playerUrl = `file://${path.join(__dirname, `../build/index.html?root=player`)}`;
+}
+Object.freeze(config);
+
 // globals to avoid being GC'ed
 let launcher = null,
     player = null,
@@ -25,14 +35,16 @@ function createWindow() {
         skipTaskbar: true,
         show: false,
     });
-    launcher.loadURL(isDev ? 'http://localhost:3000/index.html?root=launcher' : `file://${path.join(__dirname, '../build/index.html?root=launcher')}`);
+    launcher.loadURL(config.launcherUrl);
     launcher.on('ready-to-show', () => launcher.show());
     launcher.on('blur', () => launcher.hide());
     launcher.on('closed', () => launcher = tray = null);
 
     setupShortcuts();
     setupTray();
-    setupDevTools();
+    if (config.isDev) {
+        setupDevTools();
+    }
 
     const { screen } = require('electron');
     const doPlayVideo = (videoId) => {
@@ -54,9 +66,7 @@ function createWindow() {
                 show: false,
                 menu: Menu.getApplicationMenu(),
             });
-            const urlParams = 'root=player';
-            player.loadURL(isDev ? `http://localhost:3000/index.html?${urlParams}`
-                : `file://${path.join(__dirname, `../build/index.html?${urlParams}`)}`)
+            player.loadURL(config.playerUrl);
             player.on('ready-to-show', () => {
                 doPlayVideo(videoId);
                 player.show();
@@ -115,6 +125,7 @@ function setupDevTools() {
     installExtension(REACT_DEVELOPER_TOOLS)
         .then((name) => console.log(`Added Extension:  ${name}`))
         .catch((err) => console.log('An error occurred: ', err));
+    require('devtron').install();
 }
 
 function toggleLauncher() {
