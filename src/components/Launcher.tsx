@@ -24,6 +24,8 @@ interface State {
 
 class Launcher extends React.Component<Props, State> {
     private static SEARCH_DELAY = 500;
+    private static ITEM_SCROLL_OFFSET = parseInt(getComputedStyle(document.body)
+        .getPropertyValue('--padding-normal').trim(), 10);
     private scheduleSearch: (searchText: string) => void;
 
     constructor(props: Props) {
@@ -141,7 +143,7 @@ class Launcher extends React.Component<Props, State> {
     static scrollToItem(index: number) {
         scrollToElement(`#item${index}`, {
             align: 'bottom',
-            offset: 16,
+            offset: Launcher.ITEM_SCROLL_OFFSET,
             duration: 200,
         });
     }
